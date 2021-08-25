@@ -1,12 +1,16 @@
-const Books = [
-  { title: 'The Awakening', author: 'Kate Chopin' },
-  { title: 'City Of Glass', author: 'Paul Aster' }
-]
-
 const resolvers = {
   Query: {
-    books: () => Books
+    books: () => [
+      {
+        title: 'The Awakening',
+        author: 'Kate Chopin'
+      },
+      {
+        title: 'City of Glass',
+        author: 'Paul Auster'
+      }
+    ]
   }
 }
 
-module.export = resolvers
+module.exports = resolvers

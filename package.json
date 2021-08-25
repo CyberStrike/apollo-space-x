@@ -1,6 +1,6 @@
 {
   "scripts": {
-    "start": "nodemon ",
+    "start": "nodemon ./server/app.js",
     "lint": "eslint **/**.js --ignore-path .gitignore",
     "format": "prettier .  --write"
   },
