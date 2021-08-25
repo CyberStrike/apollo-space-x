@@ -5,6 +5,7 @@
     "format": "prettier .  --write"
   },
   "dependencies": {
+    "apollo-datasource-rest": "^3.2.0",
     "apollo-server": "^3.2.0",
     "graphql": "^15.5.1"
   },
