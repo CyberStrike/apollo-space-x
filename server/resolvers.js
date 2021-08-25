@@ -1,6 +1,6 @@
 const resolvers = {
   Query: {
-    books: () => [
+    rockets: () => [
       {
         title: 'The Awakening',
         author: 'Kate Chopin'

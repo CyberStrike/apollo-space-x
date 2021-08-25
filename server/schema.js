@@ -1,22 +1,53 @@
 const { gql } = require('apollo-server')
 
-// A schema is a collection of type definitions (hence "typeDefs")
-// that together define the "shape" of queries that are executed against
-// your data.
 const typeDefs = gql`
-  # Comments in GraphQL strings (such as this one) start with the hash (#) symbol.
-
-  # This "Book" type defines the queryable fields for every book in our data source.
-  type Book {
-    title: String
-    author: String
+  type Launch {
+    id: ID!
+    site: String
+    mission: Mission
+    rocket: Rocket
+    isBooked: Boolean!
   }
 
-  # The "Query" type is special: it lists all of the available queries that
-  # clients can execute, along with the return type for each. In this
-  # case, the "books" query returns an array of zero or more Books (defined above).
+  type Mission {
+    name: String
+    missionPatchSize(size: PatchSize): String
+  }
+
+  type Rocket {
+    id: ID!
+    name: String
+    type: String
+  }
+
+  type User {
+    id: ID!
+    email: String!
+    trips: [Launch]
+  }
+
+  enum PatchSize {
+    SMALL
+    LARGE
+  }
+
   type Query {
-    books: [Book]
+    launch(id: ID): Launch
+    launches: [Launch]!
+    rockets: [Rocket]
+    me: User
+  }
+
+  type TripUpdateResponse {
+    success: Boolean
+    message: String
+    launches: [Launch]
+  }
+
+  type Mutation {
+    bookTrips(launchIds: [ID]!): TripUpdateResponse!
+    cancelTrip(LaunchId: ID!): TripUpdateResponse!
+    login(email: String): User
   }
 `
 
