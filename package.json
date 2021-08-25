@@ -9,7 +9,8 @@
     "apollo-server": "^3.2.0",
     "graphql": "^15.5.1",
     "isemail": "^3.2.0",
-    "sequelize": "^6.6.5"
+    "sequelize": "^6.6.5",
+    "sqlite3": "^5.0.2"
   },
   "devDependencies": {
     "eslint": "^7.32.0",
