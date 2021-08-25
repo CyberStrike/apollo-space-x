@@ -1,4 +1,9 @@
 {
+  "scripts": {
+    "start": "nodemon ",
+    "lint": "eslint **/**.js --ignore-path .gitignore",
+    "format": "prettier .  --write"
+  },
   "dependencies": {
     "apollo-server": "^3.2.0",
     "graphql": "^15.5.1"
