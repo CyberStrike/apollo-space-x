@@ -11,7 +11,7 @@ const typeDefs = gql`
 
   type Mission {
     name: String
-    missionPatchSize(size: PatchSize): String
+    missionPatch(size: PatchSize): String
   }
 
   type Rocket {
@@ -26,6 +26,12 @@ const typeDefs = gql`
     trips: [Launch]
   }
 
+  type LaunchConnection {
+    cursor: String!
+    hasMore: Boolean!
+    data: [Launch]!
+  }
+
   enum PatchSize {
     SMALL
     LARGE
@@ -33,7 +39,7 @@ const typeDefs = gql`
 
   type Query {
     launch(id: ID): Launch
-    launches: [Launch]!
+    launches(pageSize: Int, after: String): LaunchConnection!
     rockets: [Rocket]
     me: User
   }
