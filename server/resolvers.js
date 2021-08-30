@@ -62,6 +62,17 @@ const resolvers = {
       if (!launchIds) return []
       return dataSources.getLaunchesById({ launchIds }) || []
     }
+  },
+  Mutation: {
+    login: async (_, { email }, { dataSources }) => {
+      const user = await dataSources.userAPI.findOrCreateUser({ email })
+      const setAndEncodeEmail = (user) => {
+        user.token = Buffer.from(email).toString('base64')
+        return user
+      }
+
+      if (user) return setAndEncodeEmail(user)
+    }
   }
 }
 
