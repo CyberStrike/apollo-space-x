@@ -1,3 +1,5 @@
+require('dotenv').config()
+
 const { ApolloServer } = require('apollo-server')
 const { createStore } = require('./utilities')
 
