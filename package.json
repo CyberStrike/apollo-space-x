@@ -2,7 +2,8 @@
   "scripts": {
     "start": "nodemon ./server/index.js",
     "lint": "eslint **/**.js --ignore-path .gitignore",
-    "format": "prettier .  --write"
+    "format": "prettier .  --write",
+    "test": "jest"
   },
   "dependencies": {
     "apollo-datasource-rest": "^3.2.0",
@@ -17,8 +18,10 @@
     "eslint": "^7.32.0",
     "eslint-config-standard": "^16.0.3",
     "eslint-plugin-import": "^2.24.2",
+    "eslint-plugin-jest": "^24.4.0",
     "eslint-plugin-node": "^11.1.0",
     "eslint-plugin-promise": "^5.1.0",
+    "jest": "^27.1.0",
     "nodemon": "^2.0.12",
     "prettier-eslint": "^13.0.0"
   }
