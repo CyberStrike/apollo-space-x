@@ -1,5 +1,6 @@
 const { paginateResults } = require('./utilities')
 const login = require('./mutation.login')
+const cancelTrip = require('./mutation.canceltrip')
 
 const resolvers = {
   Query: {
@@ -82,18 +83,7 @@ const resolvers = {
         launches
       }
     },
-    cancelTrip: async (_, { launchId }, { dataSources }) => {
-      const result = await dataSources.userAPI.cancelTrip({ launchId })
-      if (!result) {
-        return {
-          success: false,
-          message: 'failed to cancel trip'
-        }
-      }
-
-      const launch = await dataSources.launchAPI.getLaunchById({ launchId })
-      return { success: true, message: 'trip cancelled', launches: [launch] }
-    },
+    cancelTrip,
     login
   }
 }
