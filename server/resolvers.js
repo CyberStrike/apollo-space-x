@@ -1,4 +1,5 @@
 const { paginateResults } = require('./utilities')
+const login = require('./mutation.login')
 
 const resolvers = {
   Query: {
@@ -66,7 +67,7 @@ const resolvers = {
   Mutation: {
     bookTrips: async (_, { launchIds }, { dataSources }) => {
       const results = await dataSources.userAPI.bookTrips({ launchIds })
-      const launches = await dataSources.launchAPI.getLaunchesById({
+      const launches = await dataSources.launchAPI.getLaunchesByIds({
         launchIds
       })
 
@@ -91,17 +92,9 @@ const resolvers = {
       }
 
       const launch = await dataSources.launchAPI.getLaunchById({ launchId })
-      return { success: true, message: 'trip canceled', launches: [launch] }
+      return { success: true, message: 'trip cancelled', launches: [launch] }
     },
-    login: async (_, { email }, { dataSources }) => {
-      const user = await dataSources.userAPI.findOrCreateUser({ email })
-      const setAndEncodeEmail = (user) => {
-        user.token = Buffer.from(email).toString('base64')
-        return user
-      }
-
-      if (user) return setAndEncodeEmail(user)
-    }
+    login
   }
 }
 
