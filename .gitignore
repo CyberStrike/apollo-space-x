@@ -1,3 +1,5 @@
 node_modules
 .env.local
 launch.json
+store.sqlite
+.vscode
