@@ -60,7 +60,7 @@ const resolvers = {
     trips: async (_, __, { dataSources }) => {
       const launchIds = dataSources.userAPI.getLaunchIdsByUser()
       if (!launchIds) return []
-      return dataSources.getLaunchesById({ launchIds }) || []
+      return dataSources.launchAPI.getLaunchesById({ launchIds }) || []
     }
   },
   Mutation: {
