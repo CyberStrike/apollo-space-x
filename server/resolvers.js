@@ -2,6 +2,7 @@ const { paginateResults } = require('./utilities')
 const login = require('./mutation.login')
 const cancelTrip = require('./mutation.canceltrip')
 const bookTrips = require('./mutation.bookTrips')
+const User = require('./resolver.user')
 
 const resolvers = {
   Query: {
@@ -44,6 +45,11 @@ const resolvers = {
       return dataSources.launchAPI.getLaunchById({ launchId: id })
     }
   },
+  Launch: {
+    isBooked: async (launch, _, { dataSources }) => {
+      return dataSources.userAPI.isBookedOnLaunch({ launchId: launch.id })
+    }
+  },
   Mission: {
     missionPatch: (mission, { size } = { size: 'LARGE' }) => {
       const options = {
@@ -54,23 +60,8 @@ const resolvers = {
       return options[size]
     }
   },
-  Launch: {
-    isBooked: async (launch, _, { dataSources }) => {
-      return dataSources.userAPI.isBookedOnLaunch({ launchId: launch.id })
-    }
-  },
-  User: {
-    trips: async (_, __, { dataSources }) => {
-      const launchIds = dataSources.userAPI.getLaunchIdsByUser()
-      if (!launchIds) return []
-      return dataSources.launchAPI.getLaunchesById({ launchIds }) || []
-    }
-  },
-  Mutation: {
-    bookTrips,
-    cancelTrip,
-    login
-  }
+  Mutation: { bookTrips, cancelTrip, login },
+  User
 }
 
 module.exports = resolvers
