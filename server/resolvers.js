@@ -1,10 +1,15 @@
 const { paginateResults } = require('./utilities')
+
+// Resolvers
+const User = require('./resolver.user')
+const Mission = require('./resolver.mission')
+
+// Mutations
 const login = require('./mutation.login')
 const cancelTrip = require('./mutation.canceltrip')
 const bookTrips = require('./mutation.bookTrips')
-const User = require('./resolver.user')
 
-const resolvers = {
+module.exports = {
   Query: {
     rockets: () => [
       {
@@ -50,18 +55,7 @@ const resolvers = {
       return dataSources.userAPI.isBookedOnLaunch({ launchId: launch.id })
     }
   },
-  Mission: {
-    missionPatch: (mission, { size } = { size: 'LARGE' }) => {
-      const options = {
-        LARGE: mission.missionPatchLarge,
-        SMALL: mission.missionPatchSmall
-      }
-
-      return options[size]
-    }
-  },
+  Mission,
   Mutation: { bookTrips, cancelTrip, login },
   User
 }
-
-module.exports = resolvers
