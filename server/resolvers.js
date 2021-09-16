@@ -1,6 +1,7 @@
 const { paginateResults } = require('./utilities')
 
 // Resolvers
+const Launch = require('./resolver.launch')
 const User = require('./resolver.user')
 const Mission = require('./resolver.mission')
 
@@ -50,11 +51,7 @@ module.exports = {
       return dataSources.launchAPI.getLaunchById({ launchId: id })
     }
   },
-  Launch: {
-    isBooked: async (launch, _, { dataSources }) => {
-      return dataSources.userAPI.isBookedOnLaunch({ launchId: launch.id })
-    }
-  },
+  Launch,
   Mission,
   Mutation: { bookTrips, cancelTrip, login },
   User
