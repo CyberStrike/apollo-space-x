@@ -6,6 +6,9 @@ const mockStore = {
     findAll: jest.fn()
   },
   trips: {
+    destroy: jest.fn(),
+    findAll: jest.fn(),
+    findOne: jest.fn(),
     findOrCreate: jest.fn()
   }
 }
@@ -28,14 +31,15 @@ describe('[User Service]', () => {
     })
 
     it('looks up / creates user in store', async () => {
-      const { id, email } = user
       const { findOrCreate } = mockStore.users
-      findOrCreate.mockReturnValueOnce([{ id }])
+      findOrCreate.mockReturnValueOnce([{ id: user.id }])
 
       const record = await db.findOrCreateUser(user)
 
-      expect(findOrCreate).toHaveBeenCalledWith({ where: { email } })
-      expect(record).toEqual({ id })
+      expect(findOrCreate).toHaveBeenCalledWith({
+        where: { email: user.email }
+      })
+      expect(record).toEqual({ id: user.id })
     })
   })
 
@@ -98,18 +102,91 @@ describe('[User Service]', () => {
   })
 
   describe('Cancel Trip', () => {
-    test.todo('no user returns false')
-    test.todo('cancels a trip')
+    const { destroy } = mockStore.trips
+    const launchId = 1
+    const userId = user.id
+
+    afterEach(() => destroy.mockReset())
+
+    test('no user returns false', async () => {
+      const record = await db.cancelTrip({ launchId })
+      expect(record).toBeFalsy()
+    })
+
+    test('cancels a trip', async () => {
+      db.initialize({ context: { user } }) // Set User
+      destroy.mockReturnValue({})
+
+      const record = await db.cancelTrip({ launchId })
+
+      expect(destroy).toHaveBeenCalledTimes(1)
+      expect(destroy).toHaveBeenCalledWith({ where: { launchId, userId } })
+      expect(record).toBeTruthy()
+
+      db.initialize({ context: null }) // Clear user
+    })
   })
 
   describe('Get Launch Ids By User', () => {
-    test.todo('no user returns false')
-    test.todo('retrieves all trips for a user')
+    const { findAll } = mockStore.trips
+    const launchId = 1
+    const userId = user.id
+
+    beforeEach(() => db.initialize({ context: { user } }))
+    afterEach(() => findAll.mockReset())
+
+    test('no user returns false', async () => {
+      db.initialize({ context: null }) // Set User
+      const record = await db.getLaunchIdsByUser()
+      expect(record).toBeFalsy()
+    })
+
+    test('retrieves all trips for a user', async () => {
+      findAll.mockReturnValueOnce([{ dataValues: { launchId } }])
+
+      const record = await db.getLaunchIdsByUser()
+
+      expect(findAll).toHaveBeenCalledTimes(1)
+      expect(findAll).toHaveBeenCalledWith({ where: { userId } })
+
+      expect(record).toHaveLength(1)
+      expect(record).toEqual(expect.arrayContaining([launchId]))
+    })
+
+    test('no trips returns empty array', async () => {
+      const record = await db.getLaunchIdsByUser()
+      expect(record).toEqual(expect.arrayContaining([]))
+    })
   })
 
   describe('Is Booked On Launch', () => {
-    test.todo('no user returns false')
-    test.todo('verifies user is booked on a trip')
+    const { findOne } = mockStore.trips
+    const launchId = 1
+    const userId = user.id
+
+    beforeEach(() => db.initialize({ context: { user } }))
+    afterEach(() => findOne.mockReset())
+
+    test('no user returns false', async () => {
+      db.initialize({ context: null }) // Set User
+      const record = await db.isBookedOnLaunch({ launchId })
+      expect(record).toBeFalsy()
+    })
+
+    test('not booked returns false', async () => {
+      findOne.mockReturnValue(null)
+      const record = await db.isBookedOnLaunch({ launchId })
+      expect(record).toBeFalsy()
+    })
+
+    test('verifies user is booked on a trip', async () => {
+      findOne.mockReturnValue({})
+      const record = await db.isBookedOnLaunch({ launchId })
+
+      expect(findOne).toHaveBeenCalledTimes(1)
+      expect(findOne).toHaveBeenCalledWith({ where: { launchId, userId } })
+      expect(record).toBeTruthy()
+    })
   })
 })
 

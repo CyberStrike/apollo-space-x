@@ -48,7 +48,9 @@ class UserAPI extends DataSource {
   }
 
   async cancelTrip ({ launchId }) {
-    const userId = this.context.user.id
+    const userId = this.context?.user?.id
+    if (!userId) return false
+
     return !!this.store.trips.destroy({ where: { userId, launchId } })
   }
 
@@ -56,21 +58,23 @@ class UserAPI extends DataSource {
     if (!this.context || !this.context.user) return false
 
     const userId = this.context.user.id
-    const found = await this.store.trips.findAll({
+    const records = await this.store.trips.findAll({
       where: { userId }
     })
-    return found && found.length
-      ? found.map((l) => l.dataValues.launchId).filter((l) => !!l)
+    return records && records.length
+      ? records.map((l) => l.dataValues.launchId).filter((l) => !!l)
       : []
   }
 
   async isBookedOnLaunch ({ launchId }) {
     if (!this.context || !this.context.user) return false
+
     const userId = this.context.user.id
-    const found = await this.store.trips.findAll({
+    const trip = await this.store.trips.findOne({
       where: { userId, launchId }
     })
-    return found && found.length > 0
+
+    return !!trip
   }
 }
 
