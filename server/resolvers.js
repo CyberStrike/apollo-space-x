@@ -1,14 +1,14 @@
 const { paginateResults } = require('./utilities')
 
 // Resolvers
-const Launch = require('./resolver.launch')
-const User = require('./resolver.user')
-const Mission = require('./resolver.mission')
+const Launch = require('./launch.resolver')
+const User = require('./user.resolver')
+const Mission = require('./mission.resolver')
 
 // Mutations
-const login = require('./mutation.login')
-const cancelTrip = require('./mutation.canceltrip')
-const bookTrips = require('./mutation.bookTrips')
+const login = require('./login.mutation')
+const cancelTrip = require('./cancelTrip.mutation')
+const bookTrips = require('./bookTrips.mutation')
 
 module.exports = {
   Query: {
