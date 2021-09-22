@@ -8,6 +8,7 @@ const resolvers = require('./resolvers.js')
 
 const LaunchAPI = require('./launch.service')
 const UserAPI = require('./user.service')
+const UserTrip = require('./userTrip.service')
 const IsEmail = require('isemail')
 
 const store = createStore()
@@ -28,7 +29,8 @@ const server = new ApolloServer({
   resolvers,
   dataSources: () => ({
     launchAPI: new LaunchAPI(),
-    userAPI: new UserAPI({ store })
+    userAPI: new UserAPI({ store }),
+    userTrip: new UserTrip({ store })
   })
 })
 
